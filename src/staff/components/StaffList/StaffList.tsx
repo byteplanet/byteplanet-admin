@@ -24,7 +24,7 @@ import {
 } from "@saleor/staff/urls";
 import { ListProps, RelayToFlat, SortPage } from "@saleor/types";
 import { getArrowDirection } from "@saleor/utils/sort";
-import classNames from "classnames";
+import clsx from "clsx";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
@@ -141,7 +141,7 @@ const StaffList: React.FC<StaffListProps> = props => {
           staffMembers,
           staffMember => (
             <TableRowLink
-              className={classNames({
+              className={clsx({
                 [classes.tableRow]: !!staffMember,
               })}
               hover={!!staffMember}
@@ -149,7 +149,7 @@ const StaffList: React.FC<StaffListProps> = props => {
               key={staffMember ? staffMember.id : "skeleton"}
             >
               <TableCell>
-                <div className={classes.avatar}>
+                <div className={classes.avatar} data-test-id="staffAvatar">
                   {maybe(() => staffMember.avatar.url) ? (
                     <img
                       className={classes.avatarImage}
@@ -164,7 +164,11 @@ const StaffList: React.FC<StaffListProps> = props => {
                 <Typography>
                   {getUserName(staffMember) || <Skeleton />}
                 </Typography>
-                <Typography variant={"caption"} className={classes.statusText}>
+                <Typography
+                  variant={"caption"}
+                  className={classes.statusText}
+                  data-test-id="staffStatusText"
+                >
                   {maybe<React.ReactNode>(
                     () =>
                       staffMember.isActive

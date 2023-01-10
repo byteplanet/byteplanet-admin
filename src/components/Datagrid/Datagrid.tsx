@@ -9,17 +9,18 @@ import DataEditor, {
 } from "@glideapps/glide-data-grid";
 import { Card, CardContent, Typography } from "@material-ui/core";
 import { usePreventHistoryBack } from "@saleor/hooks/usePreventHistoryBack";
-import { MoreHorizontalIcon, useTheme } from "@saleor/macaw-ui";
-import classNames from "classnames";
+import { useTheme } from "@saleor/macaw-ui";
+import clsx from "clsx";
 import range from "lodash/range";
 import throttle from "lodash/throttle";
 import React from "react";
 import { FormattedMessage } from "react-intl";
 
-import CardMenu, { CardMenuItem } from "../CardMenu";
+import { CardMenuItem } from "../CardMenu";
 import ColumnPicker from "../ColumnPicker";
 import { FullScreenContainer } from "./FullScreenContainer";
 import { Header } from "./Header";
+import { RowActions } from "./RowActions";
 import useStyles, { useDatagridTheme, useFullScreenStyles } from "./styles";
 import { AvailableColumn } from "./types";
 import useCells from "./useCells";
@@ -268,20 +269,20 @@ export const Datagrid: React.FC<DatagridProps> = ({
                   }}
                   rightElement={
                     <div
-                      className={classNames(classes.rowActionBar, {
+                      className={clsx(classes.rowActionBar, {
                         [classes.rowActionBarScrolledToRight]: scrolledToRight,
                       })}
                     >
                       <div
-                        className={classNames(classes.rowActionBarShadow, {
+                        className={clsx(classes.rowActionBarShadow, {
                           [classes.rowActionBarShadowActive]: !scrolledToRight,
                         })}
                       />
                       <div className={classes.columnPicker}>
                         <ColumnPicker
                           IconButtonProps={{
-                            className: classes.columnPickerBtn,
-                            variant: "secondary",
+                            className: classes.ghostIcon,
+                            variant: "ghost",
                             hoverOutline: false,
                           }}
                           availableColumns={availableColumnsChoices}
@@ -297,7 +298,7 @@ export const Datagrid: React.FC<DatagridProps> = ({
                       </div>
                       {hasColumnGroups && (
                         <div
-                          className={classNames(classes.rowAction, {
+                          className={clsx(classes.rowAction, {
                             [classes.rowActionScrolledToRight]: scrolledToRight,
                           })}
                         />
@@ -305,26 +306,10 @@ export const Datagrid: React.FC<DatagridProps> = ({
                       {Array(rowsTotal)
                         .fill(0)
                         .map((_, index) => (
-                          <div
-                            className={classNames(classes.rowAction, {
-                              [classes.rowActionSelected]: selection?.rows.hasIndex(
-                                index,
-                              ),
-                              [classes.rowActionScrolledToRight]: scrolledToRight,
-                            })}
-                            key={index}
-                          >
-                            <CardMenu
-                              disabled={index >= rowsTotal - added.length}
-                              Icon={MoreHorizontalIcon}
-                              IconButtonProps={{
-                                className: classes.columnPickerBtn,
-                                hoverOutline: false,
-                                state: "default",
-                              }}
-                              menuItems={menuItems(index)}
-                            />
-                          </div>
+                          <RowActions
+                            menuItems={menuItems(index)}
+                            disabled={index >= rowsTotal - added.length}
+                          />
                         ))}
                     </div>
                   }

@@ -8,7 +8,7 @@ import Grid from "@saleor/components/Grid";
 import Hr from "@saleor/components/Hr";
 import { AppQuery } from "@saleor/graphql";
 import { sectionNames } from "@saleor/intl";
-import classNames from "classnames";
+import clsx from "clsx";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
@@ -44,10 +44,7 @@ export const AppPage: React.FC<AppPageProps> = ({
         <div className={classes.breadcrumbContainer}>
           <div className={classes.breadcrumbs}>
             <Typography
-              className={classNames(
-                classes.breadcrumb,
-                classes.breadcrumbDisabled,
-              )}
+              className={clsx(classes.breadcrumb, classes.breadcrumbDisabled)}
               variant="h5"
             >
               {data?.name}
@@ -83,9 +80,9 @@ export const AppPage: React.FC<AppPageProps> = ({
         {url && (
           <AppFrame
             src={url}
-            appToken={data.accessToken}
+            appToken={data?.accessToken ?? ""}
             onError={onError}
-            appId={data.id}
+            appId={data?.id ?? ""}
             refetch={refetch}
           />
         )}

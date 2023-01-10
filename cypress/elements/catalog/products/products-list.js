@@ -30,6 +30,12 @@ export const PRODUCTS_LIST = {
       productType: '[data-test-id="filter-group-active-productType"]',
       stock: '[data-test-id="filter-group-active-stock"]',
       channel: '[data-test-id="filter-group-active-channel"]',
+      currency: '[data-test-id="filter-group-active-currency"]',
+      currencySpecific: {
+        THB: '[data-test-id="filter-option-THB"]',
+        PLN: '[data-test-id="filter-option-PLN"]',
+        USD: '[data-test-id="filter-option-USD"]',
+      },
     },
     filterField: {
       filterField: '[data-test-id*="filter-field"]',
@@ -41,8 +47,8 @@ export const PRODUCTS_LIST = {
     },
     filterBySearchInput: '[data-test-id="filter-field-autocomplete-input"]',
   },
-  nextPageButton: "[data-test='button-pagination-next']",
-  previousPagePagination: "[data-test='button-pagination-back']",
+  nextPageButton: "[data-test-id='button-pagination-next']",
+  previousPagePagination: "[data-test-id='button-pagination-back']",
   resultsOnPageSelect: "[data-test-id='PaginationRowNumberSelect']",
   rowNumberOption: "[data-test-id='rowNumberOption']",
 };

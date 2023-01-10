@@ -9,9 +9,9 @@ import { InputProps } from "@material-ui/core/Input";
 import { ExtendedFormHelperTextProps } from "@saleor/channels/components/ChannelForm/types";
 import { ChevronIcon } from "@saleor/macaw-ui";
 import { FetchMoreProps } from "@saleor/types";
-import classNames from "classnames";
+import clsx from "clsx";
 import Downshift from "downshift";
-import { filter } from "fuzzaldrin";
+import Fuse from "fuse.js";
 import React from "react";
 
 import Debounce, { DebounceProps } from "../Debounce";
@@ -37,6 +37,7 @@ export interface SingleAutocompleteSelectFieldProps
   helperText?: string;
   label?: string;
   InputProps?: InputProps;
+  autocomplete?: string,
   fetchChoices?: (value: string) => void;
   onChange: (event: React.ChangeEvent<any>) => void;
   fetchOnFocus?: boolean;
@@ -65,6 +66,7 @@ const SingleAutocompleteSelectFieldComponent: React.FC<SingleAutocompleteSelectF
     label,
     loading,
     name,
+    autocomplete,
     placeholder,
     value,
     InputProps,
@@ -189,7 +191,7 @@ const SingleAutocompleteSelectFieldComponent: React.FC<SingleAutocompleteSelectF
                     handleToggleMenu();
                     handleFocus();
                   }}
-                  className={classNames(classes.adornment, {
+                  className={clsx(classes.adornment, {
                     [classes.adornmentRotate]: isOpen,
                   })}
                 >
@@ -214,7 +216,7 @@ const SingleAutocompleteSelectFieldComponent: React.FC<SingleAutocompleteSelectF
 
             return (
               <div
-                className={classNames(
+                className={clsx(
                   classes.container,
                   "click-outside-ignore",
                   className,
@@ -229,6 +231,7 @@ const SingleAutocompleteSelectFieldComponent: React.FC<SingleAutocompleteSelectF
                   inputProps={{
                     ...(getInputProps({
                       placeholder,
+                      autocomplete,
                       onClick: handleToggleMenu,
                     }) as OutlinedInputProps["inputProps"]),
                   }}
@@ -298,12 +301,12 @@ const SingleAutocompleteSelectField: React.FC<SingleAutocompleteSelectFieldProps
     );
   }
 
+  const fuse = new Fuse(choices, { keys: ["label"] });
+
   return (
     <SingleAutocompleteSelectFieldComponent
       fetchChoices={q => setQuery(q || "")}
-      choices={filter(choices, query, {
-        key: "label",
-      })}
+      choices={query !== "" ? fuse.search(query).map(v => v.item) : choices}
       {...rest}
     />
   );

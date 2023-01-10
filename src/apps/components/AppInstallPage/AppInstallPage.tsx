@@ -10,17 +10,19 @@ import Skeleton from "@saleor/components/Skeleton";
 import { AppFetchMutation, AppInstallMutation } from "@saleor/graphql";
 import { SubmitPromise } from "@saleor/hooks/useForm";
 import { buttonMessages } from "@saleor/intl";
-import classNames from "classnames";
+import clsx from "clsx";
 import React from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 
 import { useStyles } from "../../styles";
 
 export interface AppInstallPageProps {
-  data: AppFetchMutation["appFetchManifest"]["manifest"];
+  data: NonNullable<AppFetchMutation["appFetchManifest"]>["manifest"];
   loading: boolean;
   navigateToAppsList: () => void;
-  onSubmit: () => SubmitPromise<AppInstallMutation["appInstall"]["errors"]>;
+  onSubmit: () => SubmitPromise<
+    NonNullable<AppInstallMutation["appInstall"]>["errors"]
+  >;
 }
 
 export const AppInstallPage: React.FC<AppInstallPageProps> = ({
@@ -60,10 +62,7 @@ export const AppInstallPage: React.FC<AppInstallPageProps> = ({
           ) : (
             <div className={classes.installAppContainer}>
               <div
-                className={classNames(
-                  classes.installIcon,
-                  classes.installSaleorIcon,
-                )}
+                className={clsx(classes.installIcon, classes.installSaleorIcon)}
               >
                 <img src={saleorDarkLogoSmall} alt="" />
               </div>

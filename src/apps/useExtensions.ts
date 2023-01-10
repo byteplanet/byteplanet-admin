@@ -8,12 +8,13 @@ import {
 import { RelayToFlat } from "@saleor/types";
 import { mapEdgesToItems } from "@saleor/utils/maps";
 
-import { AppData, useExternalApp } from "./components/ExternalAppContext";
+import { useExternalApp } from "./components/ExternalAppContext/";
+import { AppData } from "./components/ExternalAppContext/context";
 import { AppDetailsUrlMountQueryParams } from "./urls";
 
 export interface Extension {
   id: string;
-  app: RelayToFlat<ExtensionListQuery["appExtensions"]>[0]["app"];
+  app: RelayToFlat<NonNullable<ExtensionListQuery["appExtensions"]>>[0]["app"];
   accessToken: string;
   permissions: PermissionEnum[];
   label: string;
@@ -53,14 +54,14 @@ export const extensionMountPoints = {
 };
 
 const filterAndMapToTarget = (
-  extensions: RelayToFlat<ExtensionListQuery["appExtensions"]>,
+  extensions: RelayToFlat<NonNullable<ExtensionListQuery["appExtensions"]>>,
   openApp: (appData: AppData) => void,
 ): ExtensionWithParams[] =>
   extensions.map(
     ({ id, accessToken, permissions, url, label, mount, target, app }) => ({
       id,
       app,
-      accessToken,
+      accessToken: accessToken || "",
       permissions: permissions.map(({ code }) => code),
       url,
       label,
@@ -68,7 +69,7 @@ const filterAndMapToTarget = (
       open: (params: AppDetailsUrlMountQueryParams) =>
         openApp({
           id: app.id,
-          appToken: accessToken,
+          appToken: accessToken || "",
           src: url,
           label,
           target,
@@ -152,7 +153,7 @@ export const useExtensions = <T extends AppExtensionMountEnum>(
   });
 
   const extensions = filterAndMapToTarget(
-    mapEdgesToItems(data?.appExtensions) || [],
+    mapEdgesToItems(data?.appExtensions ?? undefined) || [],
     openApp,
   );
 

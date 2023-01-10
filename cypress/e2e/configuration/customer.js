@@ -71,7 +71,9 @@ describe("Tests for customer", () => {
           expect(customer.lastName, "Expect correct last name").to.eq(
             randomName,
           );
-          expect(customer.email, "Expect correct email").to.eq(email);
+          expect(customer.email, "Expect correct email").to.eq(
+            email.toLowerCase(),
+          );
           expect(customer.note, "Expect correct note").to.eq(note);
           cy.expectCorrectFullAddress(customer.addresses[0], address);
         });
@@ -87,7 +89,7 @@ describe("Tests for customer", () => {
 
       createCustomer(email, randomName).then(({ user }) => {
         cy.visit(customerDetailsUrl(user.id))
-          .get(CUSTOMER_DETAILS.menageAddressesButton)
+          .get(CUSTOMER_DETAILS.manageAddressesButton)
           .click()
           .get(CUSTOMER_DETAILS.addAddressButton)
           .click()
@@ -111,7 +113,7 @@ describe("Tests for customer", () => {
 
       createCustomer(email, randomName, address).then(({ user }) => {
         cy.visit(customerDetailsUrl(user.id))
-          .get(CUSTOMER_DETAILS.menageAddressesButton)
+          .get(CUSTOMER_DETAILS.manageAddressesButton)
           .click()
           .waitForProgressBarToNotExist()
           .get(BUTTON_SELECTORS.showMoreButton)
@@ -146,7 +148,7 @@ describe("Tests for customer", () => {
         })
         .then(() => {
           cy.visit(customerDetailsUrl(user.id))
-            .get(CUSTOMER_DETAILS.menageAddressesButton)
+            .get(CUSTOMER_DETAILS.manageAddressesButton)
             .click()
             .waitForProgressBarToNotExist()
             .get(BUTTON_SELECTORS.showMoreButton)
@@ -184,7 +186,7 @@ describe("Tests for customer", () => {
 
       createCustomer(email, randomName, address).then(({ user }) => {
         cy.visit(customerDetailsUrl(user.id))
-          .get(CUSTOMER_DETAILS.menageAddressesButton)
+          .get(CUSTOMER_DETAILS.manageAddressesButton)
           .click()
           .get(BUTTON_SELECTORS.showMoreButton)
           .should("be.enabled")
@@ -277,7 +279,7 @@ describe("Tests for customer", () => {
           );
           expect(user.lastName, "Expect correct last name").to.eq(updatedName);
           expect(user.email, "Expect correct email").to.eq(
-            `${updatedName}@example.com`,
+            `${updatedName}@example.com`.toLowerCase(),
           );
           expect(user.note, "Expect correct note").to.eq(updatedName);
         });
